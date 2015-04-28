@@ -68,15 +68,32 @@ function Board() {
 
 function legal_move(state, event, selected)
 {
+    var vert = selected.row - event.row;
+    var horiz = selected.col - event.col;
     var retval = false;
     if(selected.king)
     {
-        return true // TODO
+        if(Math.abs(vert) == 1 
+            && Math.abs(horiz) == 1
+            && !state.board.piece_at(event.row,event.col))
+            return true;
+        
+        if(Math.abs(vert) == 2 
+            && Math.abs(horiz) == 2
+            && !state.board.piece_at(event.row,event.col))
+        {
+            var inspect = state.board.piece_at(
+                    event.row+(vert < 0 ? -1 : 1),
+                    event.col+(horiz < 0 ? -1 : 1));
+            if(!state.board.piece_at(event.row,event.col) 
+                && _.isObject(inspect) 
+                && inspect.color != state.turn
+                && !_.isObject(state.board.piece_at(event.row,event.col)))
+                return inspect;
+        }
     }
     else
     {
-        var vert = selected.row - event.row;
-        var horiz = selected.col - event.col;
         if(state.turn === 'BLACK' && vert == -1 && Math.abs(horiz) == 1)
         {
             if(!state.board.piece_at(event.row,event.col))
@@ -89,17 +106,21 @@ function legal_move(state, event, selected)
         }
         else if(state.turn === 'BLACK' && vert == -2 && Math.abs(horiz) == 2)
         {
-            !state.board.piece_at(event.row,event.col) && 
-                _.isObject(state.board.piece_at(event.row-1,event.col+(horiz < 0 ? -1 : 1))) 
-                && !_.isObject(state.board.piece_at(event.row,event.col)) ? 
-                retval = state.board.piece_at(event.row-1,event.col+(horiz < 0 ? -1 : 1)) : null;
+            var inspect = state.board.piece_at(event.row-1,event.col+(horiz < 0 ? -1 : 1));
+            if (!state.board.piece_at(event.row,event.col) 
+                && _.isObject(inspect) 
+                && inspect.color === 'RED'
+                && !_.isObject(state.board.piece_at(event.row,event.col)))
+                return inspect;
         }
         else if(state.turn === 'RED' && vert == 2 && Math.abs(horiz) == 2)
         {
-            !state.board.piece_at(event.row,event.col) && 
-                _.isObject(state.board.piece_at(event.row+1,event.col+(horiz < 0 ? -1 : 1))) 
-                 && !_.isObject(state.board.piece_at(event.row,event.col)) ? 
-                retval = state.board.piece_at(event.row+1,event.col+(horiz < 0 ? -1 : 1)) : null;
+            var inspect = state.board.piece_at(event.row+1,event.col+(horiz < 0 ? -1 : 1));
+            if(!state.board.piece_at(event.row,event.col) 
+                && _.isObject(inspect)
+                && inspect.color === 'BLACK'
+                && !_.isObject(state.board.piece_at(event.row,event.col)))
+                return inspect;
         }
     }
     return retval;
