@@ -25,7 +25,7 @@ function Board() {
         this.config.push({row: row, col: col,color: color, king: king, selected: false});
         return this;
     }
-    this.king = function(row,col)
+    this.king = function(row,col)   
     {
         this.config = _.map(this.config,
             function(val){
