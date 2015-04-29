@@ -75,10 +75,11 @@ function unselectPiece(row,col)
 function drawBoard(boardObj)
 {
     clearAll();
+    ats_draw_board(boardObj );
     for(var i = 0; i < boardObj.config.length; ++i)
     {
         var piece = boardObj.config[i];
-        drawPiece(piece.row, piece.col, piece.color, piece.king);
+        //drawPiece(piece.row, piece.col, piece.color, piece.king);
         if(piece.selected) selectPiece(piece.row, piece.col);
         else unselectPiece(piece.row, piece.col);
     }

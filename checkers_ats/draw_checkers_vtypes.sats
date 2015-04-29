@@ -57,11 +57,11 @@ ats_draw_board(Board): void = "mac#" // for use in JS
 
 // draws a checker with token
 fun
-ats_draw_checker(token | Checker) : token
+ats_draw_checker(token, Checker) : token
 
 // converts a JS Board object to a list of checkers to be processed
 fun
-ats_board_to_list(Board): [n: nat] list(Checker,n)
+ats_board_to_list(Board): [n: nat] list(Checker,n) = "mac#"
 
 // a wrapper around the call to drawPiece()
 fun

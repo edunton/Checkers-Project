@@ -28,7 +28,7 @@ token_takeout() = let
     val n = $extval(token, "CKR_TOKENS")
 in
 if
-n <= 0
+n > 0
 then let
 extvar "CKR_TOKENS" = n-1
 in Some_vt(0) end
@@ -84,7 +84,7 @@ end
 (*****)
 
 implement
-ats_draw_checker(tk|ckr) = let
+ats_draw_checker(tk, ckr) = let
     val () = draw_piece_wrapper(ckr[0],ckr[1],ckr[2],ckr[3])
 in
 tk
@@ -95,13 +95,14 @@ end
 implement
 ats_draw_board(board) = let
     val lckr = ats_board_to_list(board)
+    val dummy = list_cons(12345,list_cons(12345,list_nil()))
     fun loop{n:nat}(lst: list(Checker,n)): void =
         (
         case+ lst of
         | list_cons(x,xs) =>
                     ((
                     case+ token_takeout() of
-                    | ~Some_vt(t) => token_hold(ats_draw_checker(t|x))
+                    | ~Some_vt(t) => token_hold(ats_draw_checker(t, x))
                     | ~None_vt() => ()
                     ); loop(xs))
         | _ => ()
@@ -119,9 +120,17 @@ var REPO_VAR = 0;
 
 function ats_board_to_list(board)
 {
-    return _.map(board.config,
-	    function(x){return [x.row,x.col,x.color == "BLACK"?0:1,x.king?1:0,null];})
-	.concat([null]);
+    function construct_ats_list(a)
+    {
+	if(_.isEmpty(a)) return null;
+        var frt = _.first(a)
+	return [
+            [frt.row,[frt.col,[frt.color == "BLACK"?0:1,[frt.king?1:0,null]]]],
+	    //[x.row,x.col,x.color == "BLACK"?0:1,x.king?1:0,null];}
+            construct_ats_list(_.rest(a))
+        ]; 
+    };
+    return construct_ats_list(board.config);
 }
 
 function draw_piece_wrapper(row,col,color,king)
