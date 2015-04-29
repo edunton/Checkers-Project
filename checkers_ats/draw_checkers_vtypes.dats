@@ -85,7 +85,7 @@ end
 
 implement
 ats_draw_checker(tk, ckr) = let
-    val () = draw_piece_wrapper(ckr[0],ckr[1],ckr[2],ckr[3])
+    val () = draw_piece_wrapper(ckr[0],ckr[1],ckr[2],ckr[3],ckr[4])
 in
 tk
 end
@@ -125,7 +125,7 @@ function ats_board_to_list(board)
 	if(_.isEmpty(a)) return null;
         var frt = _.first(a)
 	return [
-            [frt.row,[frt.col,[frt.color == "BLACK"?0:1,[frt.king?1:0,null]]]],
+            [frt.row,[frt.col,[frt.color == "BLACK"?0:1,[frt.king?1:0,[frt.selected?1:0]]]]],
 	    //[x.row,x.col,x.color == "BLACK"?0:1,x.king?1:0,null];}
             construct_ats_list(_.rest(a))
         ]; 
@@ -133,9 +133,9 @@ function ats_board_to_list(board)
     return construct_ats_list(board.config);
 }
 
-function draw_piece_wrapper(row,col,color,king)
+function draw_piece_wrapper(row,col,color,king,sel)
 {
-    drawPiece(row, col, color?"RED":"BLACK", king?true:false);
+    drawPiece(row, col, color?"RED":"BLACK", king?true:false,sel?true:false);
 }
 
 %}

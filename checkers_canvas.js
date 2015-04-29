@@ -1,4 +1,11 @@
-function drawPiece(row,col,color,king)
+/* 
+ * checker_canvas.js
+ * Author: Eric Dunton
+ * Draws the checkers onto the JS Canvas
+ */
+
+//draws checker onto the board
+function drawPiece(row,col,color,king,sel)
 { 
     var canvasElem = BOARD_GRID[row][col];
     var context = canvasElem.getContext('2d');
@@ -20,26 +27,37 @@ function drawPiece(row,col,color,king)
         context.fillText("K!",centerX,centerX);
         canvasElem.king = true;
     }
-    
-    canvasElem.piece = color;
+    if(sel){
+        selectPiece(row, col);
+    }
+    else
+    {
+        unselectPiece(row, col);
+    }
 }
 
-function removePiece(row,col)
+//calls ATS function 
+function removePiece(row,col,clearall)
 {
+    if(clearall != 'CLEAR') 
+        ats_remove_checker(row,col);
+    
     var canvasElem = BOARD_GRID[row][col];
     var context = canvasElem.getContext('2d');
     context.fillStyle = (row%2 != col%2) ? "red" : "black";
     context.fillRect(0,0, SQUARE_PARAM, SQUARE_PARAM);
-    canvasElem.piece = "NONE";
+    //canvasElem.piece = "NONE";
 }
 
+//clears the board
 function clearAll()
 {
     for(var i = 0; i < ROWS; ++i)
         for(var j = 0; j < COLS; ++j)
-            removePiece(i,j);
+            removePiece(i,j,'CLEAR');
 }
 
+//Draws cyan circle to denote seleced
 function selectPiece(row,col)
 {
     var canvasElem = BOARD_GRID[row][col];
@@ -55,7 +73,8 @@ function selectPiece(row,col)
     context.strokeStyle = '#00ffff';
     context.stroke();
 }
-    
+
+//Draws green unselected circle around checker
 function unselectPiece(row,col)
 {
     var canvasElem = BOARD_GRID[row][col];
@@ -72,24 +91,9 @@ function unselectPiece(row,col)
     context.stroke();
 }
 
+// call to ATS to draw board
 function drawBoard(boardObj)
 {
     clearAll();
-    ats_draw_board(boardObj );
-    for(var i = 0; i < boardObj.config.length; ++i)
-    {
-        var piece = boardObj.config[i];
-        //drawPiece(piece.row, piece.col, piece.color, piece.king);
-        if(piece.selected) selectPiece(piece.row, piece.col);
-        else unselectPiece(piece.row, piece.col);
-    }
-}
-
-function spaceCallback(row,col)
-{
-
-    var canvasElem = BOARD_GRID[row][col];
-    if(canvasElem.piece != "NONE")
-        if(canvasElem.selected) unselectPiece(row,col);
-        else selectPiece(row,col)
+    ats_draw_board(boardObj);
 }

@@ -1,3 +1,9 @@
+/*
+ * checkers_constants.js
+ * Author: Eric Dunton
+ * Constants used for the program
+ */
+
 var ROWS = 8;
 var COLS = 8;
 var PIECE_ROWS = 3;

@@ -1,10 +1,19 @@
+/*
+ * checkers_frp.js
+ * Author: Eric Dunton
+ * Utilizes FRP and Bacon JS to generate the board
+ */
+
+// Board Object that represents the state of the board
 function Board() {
+    
+    // Creates the initial state of a Board
     var init_board = [];
     for(var i = 0; i < 3; ++i)
         for(var j = 0; j < COLS; ++j) {
             var r = i;
             var c = j;
-            if((i%2 == 0 && j%2 == 1) || (i%2 == 1 && j%2 == 0))
+            if(i%2 != j%2)
             {
                 init_board.push({row: r, col: c,color: "BLACK", king: false, selected: false});
             }
@@ -13,18 +22,26 @@ function Board() {
                 init_board.push({row: ROWS - 1 - r, col: c,color: "RED", king: false, selected: false});
             }
         }
+    
+    //array representing the checkers on the board
     this.config = init_board;
+    
+    //removes a piece from the board
     this.remove = function(row,col)
     {
         this.config = _.reject(this.config, 
                                function(val){return val.row == row && val.col == col});
         return this;
     }
+    
+    //adds a checker to the board
     this.add = function(row,col,color,king)
     {
         this.config.push({row: row, col: col,color: color, king: king, selected: false});
         return this;
     }
+    
+    //makes a piece a king
     this.king = function(row,col)   
     {
         this.config = _.map(this.config,
@@ -35,6 +52,8 @@ function Board() {
             });
         return this;
     }
+    
+    //toggles the select state of a piece
     this.toggle_select = function(row,col,selected)
     {
         this.config = _.map(this.config,
@@ -45,10 +64,14 @@ function Board() {
             });
         return this;
     }
+    
+    //Get the pieces that are selected
     this.get_selected = function()
     {
         return _.select(this.config, function(val){ return val.selected;});
     }
+    
+    //unselects all the pieces
     this.unselect_all = function()
     {
         this.config = _.map(this.config,
@@ -59,6 +82,8 @@ function Board() {
             );
         return this;
     }
+    
+    //returns the piece at the row and column
     this.piece_at = function(row,col)
     {
         return _.find(this.config,
@@ -66,11 +91,15 @@ function Board() {
     }
 }
 
+//decides if a move is legal, returns true if it is, 
+//returns a piece that is to be removed
 function legal_move(state, event, selected)
 {
     var vert = selected.row - event.row;
     var horiz = selected.col - event.col;
     var retval = false;
+    
+    //king case
     if(selected.king)
     {
         if(Math.abs(vert) == 1 
@@ -92,6 +121,7 @@ function legal_move(state, event, selected)
                 return inspect;
         }
     }
+    //man case
     else
     {
         if(state.turn === 'BLACK' && vert == -1 && Math.abs(horiz) == 1)
@@ -126,6 +156,7 @@ function legal_move(state, event, selected)
     return retval;
 }
 
+//checks if a piece needs to be kinged
 function is_king(row, color)
 {
     if(row == ROWS -1 && color == 'BLACK')
@@ -135,9 +166,12 @@ function is_king(row, color)
     return false;
 }
 
+//transforms the board according to the event
 function transform_board(state,event)
 {
     state.alert = '';
+    
+    //End Turn button pressed
     if(event == "end")
     {
         if(state.jumps > 0)
@@ -151,6 +185,7 @@ function transform_board(state,event)
         return state;
     }
     
+    //selection attempt
     var selected = state.board.get_selected();
     if (selected.length == 0)
     {
@@ -173,6 +208,7 @@ function transform_board(state,event)
             state.board = state.board.unselect_all();
         }
     }
+    //move checker attempt
     else if (selected.length == 1)
     {
         if(state.board.piece_at(event.row,event.col))
@@ -222,6 +258,7 @@ function transform_board(state,event)
     return state;
 }
 
+//FRP with Bacon JS
 function init_frp(msgElem, button) {
     
     MAIN_STREAM = $('#'+button).asEventStream('click').map("end").merge(MAIN_STREAM);

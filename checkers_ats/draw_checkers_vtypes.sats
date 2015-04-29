@@ -24,7 +24,7 @@ absvt@ype token
 
 abstype Board
 
-typedef Checker = list(natLt(ROWS),4)
+typedef Checker = list(natLt(ROWS),5)
 
 // Takes a token to draw a piece
 fun
@@ -65,7 +65,7 @@ ats_board_to_list(Board): [n: nat] list(Checker,n) = "mac#"
 
 // a wrapper around the call to drawPiece()
 fun
-draw_piece_wrapper(row: natLt(ROWS), col: natLt(COLS), int, int): void = "mac#"
+draw_piece_wrapper(row: natLt(ROWS), col: natLt(COLS), int, int, int): void = "mac#"
 
 
 
