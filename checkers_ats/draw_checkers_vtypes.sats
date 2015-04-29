@@ -67,6 +67,15 @@ ats_board_to_list(Board): [n: nat] list(Checker,n) = "mac#"
 fun
 draw_piece_wrapper(row: natLt(ROWS), col: natLt(COLS), int, int, int): void = "mac#"
 
+(*
+Error Handling
+*)
+
+fun
+throw_tokens_not_extausted_error():void = "mac#"
+
+fun
+throw_could_not_draw_error():void = "mac#"
 
 
 

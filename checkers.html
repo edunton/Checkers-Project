@@ -19,18 +19,32 @@
         <script src="checkers_DOM_init.js"></script>
         <style>
         #container {
-            padding: 10px;
+            padding-left: 10%;
+            padding-right: 30%;
+        }
+        #params{
+            float: left;
+            width: 100px;
+        }
+        #checkerboard{
+            float: right
         }
         </style>
 	</head>
 
 	<body>
         <div id="container">
+            <h1>Welcome to MxN Checkers</h1>
             <label id="tlabel"></label>
             <button id="endturn"><h3>End Turn</h3></button>
             <br>
             <br>
-            <br>
+            <form id="params" action="checkers.html" method="get">
+                <label>Rows</label><input type="text" name="row"/>
+                <label>Columns</label><input type="text" name="col"/>
+                <label>Player Rows</label><input type="text" name="plr"/>
+                <input type="submit" value="Submit">
+            </form>
             <div id="checkerboard">
             </div>
         </div>

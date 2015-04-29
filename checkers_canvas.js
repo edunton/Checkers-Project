@@ -37,10 +37,10 @@ function drawPiece(row,col,color,king,sel)
 }
 
 //calls ATS function 
-function removePiece(row,col,clearall)
+function removePiece(row,col)
 {
-    if(clearall != 'CLEAR') 
-        ats_remove_checker(row,col);
+    //if(clearall != 'CLEAR') 
+        //ats_remove_checker(row,col);
     
     var canvasElem = BOARD_GRID[row][col];
     var context = canvasElem.getContext('2d');
@@ -54,7 +54,7 @@ function clearAll()
 {
     for(var i = 0; i < ROWS; ++i)
         for(var j = 0; j < COLS; ++j)
-            removePiece(i,j,'CLEAR');
+            removePiece(i,j);
 }
 
 //Draws cyan circle to denote seleced

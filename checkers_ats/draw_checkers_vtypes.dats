@@ -55,11 +55,13 @@ end
 implement
 tokens_release() = let
     val n = $extval(int, "CKR_TOKENS")
+in
+if n = 0 then let 
     val r = $extval(int, "REPO_VAR")
     extvar "CKR_TOKENS" = n + r
     extvar "REPO_VAR" = 0
-in
-()
+in () end 
+else throw_tokens_not_extausted_error()
 end
 
 end
@@ -85,7 +87,7 @@ end
 
 implement
 ats_draw_checker(tk, ckr) = let
-    val () = draw_piece_wrapper(ckr[0],ckr[1],ckr[2],ckr[3],ckr[4])
+    val () = draw_piece_wrapper(ckr[0],ckr[1],ckr[2],ckr[3],ckr[4])		
 in
 tk
 end
@@ -103,7 +105,7 @@ ats_draw_board(board) = let
                     ((
                     case+ token_takeout() of
                     | ~Some_vt(t) => token_hold(ats_draw_checker(t, x))
-                    | ~None_vt() => ()
+                    | ~None_vt() => throw_could_not_draw_error()
                     ); loop(xs))
         | _ => ()
         ) 
@@ -136,6 +138,19 @@ function ats_board_to_list(board)
 function draw_piece_wrapper(row,col,color,king,sel)
 {
     drawPiece(row, col, color?"RED":"BLACK", king?true:false,sel?true:false);
+}
+
+//error functions
+function
+throw_tokens_not_extausted_error()
+{
+    throw "tokens were not exhausted, some pieces unaccounted for";
+}
+
+function
+throw_could_not_draw_error()
+{
+    throw "could not draw checker, tokens were exhausted";
 }
 
 %}

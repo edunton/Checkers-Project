@@ -9,7 +9,7 @@ function Board() {
     
     // Creates the initial state of a Board
     var init_board = [];
-    for(var i = 0; i < 3; ++i)
+    for(var i = 0; i < PIECE_ROWS; ++i)
         for(var j = 0; j < COLS; ++j) {
             var r = i;
             var c = j;
@@ -229,6 +229,7 @@ function transform_board(state,event)
                                     .remove(selected[0].row,selected[0].col)
                                     .toggle_select(event.row,event.col,true);
                     state.jumps += 1;
+                    ats_remove_checker(maybe_piece.row,maybe_piece.col);
                 }
                 else if(state.jumps == 0)
                 {

@@ -1,5 +1,25 @@
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? false : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
 window.addEvent("domready", function()
 {
+    var chgrows = parseInt(getParameterByName('row'));
+    var chgcols = parseInt(getParameterByName('col'));
+    var chgplrs = parseInt(getParameterByName('plr'));
+    
+    if(chgrows && chgcols && chgplrs)
+    {
+        ROWS = chgrows > 3 ? chgrows: ROWS;
+        COLS = chgcols > 3 ? chgcols: COLS;
+        PIECE_ROWS = chgplrs < ROWS/2 ? chgplrs: PIECE_ROWS;
+        CKR_TOKENS = COLS*PIECE_ROWS;
+        SQUARE_PARAM = 600/(COLS < ROWS ? ROWS: COLS);
+    }
+    
     var board = document.getElementById("checkerboard");
     var board_grid = []
 
