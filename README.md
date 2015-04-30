@@ -8,5 +8,5 @@ The project aims to create a simple two-player checker game. The game uses funct
 The code behind the project demonstrates organization into three destinct catogories:
 
 * Canvas Utilities: HTML5 Canvas, MooTools
-* Game Logic: BaconJS, FPR
+* Game Logic: BaconJS, FRP
 * Correctness enforcement: ATS (Utilizing Linear Types)
