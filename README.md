@@ -17,7 +17,7 @@ Each piece serves uses different programming paradigms that best fit the smaller
 * draw_checkers_vtypes.sats/draw_checkers_vtypes.dats (Resource Management)
 
 ###Canvas Utilities: A Paradigm of State
-The graphical display is a stateful resource. To properly display the game, there needs to be a sense of where every polygon needs to go. To reflect this, the canvas utilites are set up in a very procdural manner. Each function corresponds to changing a bit of the display according to the given arguments. This matched up with the libraries that effect the canvas i.e. MooTools. When trying to morph the nature of a state, the procedural paradigm gives you the tools to fine tune the state. To implement this, DOM elements where stored for use in arrays. Since everything in JavaScript is a closure, leaving this state to be procedurally manipulated globally is an acceptable performance hit.
+The graphical display is a stateful resource. To properly display the game, there needs to be a sense of where every polygon needs to go. To reflect this, the canvas utilites are set up in a very procdural manner. Each function corresponds to changing a bit of the display according to the given arguments. This matched up with the libraries that effect the canvas i.e. MooTools. When trying to morph the nature of a state, the procedural paradigm gives you the tools to fine tune the state. To implement this, DOM elements where stored for use in arrays. Since everything in JavaScript is a closure, leaving this state global to be procedurally manipulated is an acceptable performance hit.
 
 ###Game Logic: An Abstraction of Functional Purity
 The arguments to the canvas utilies however do not need to derive themselves from state directly. In programming the game rules and logic, FRP helps to abstract the state of the machine into a stream of events. This abstraction benefits the programmer by releaving the concerns of fine tuning objects and states. It becomes difficult to keep track of what variables were wrongly calculated at what time. 
@@ -30,7 +30,7 @@ function Event(row,col){this.row;this.col;} //simpler datatype just to contain i
 function transform_board(state,event){/*...*/} //returns state
 ```
 
-Rather than consern itself with the state of the entire system, the _transform_board_ function concerns itself only with the momementary configuration of the game during the given event. The given event is a click on a square with some coordinates at a row and column. After it figures out what the next configuration should be, Bacon JS takes care of the rest.
+Rather than consern itself with the state of the entire system, the _transform_board_ function concerns itself only with a datatype abstraction of the momementary configuration during the given event. A click on a square with some coordinates at a row and column produces this event. After it figures out what the next configuration should be, Bacon JS takes care of the rest.
 
 Bacon JS abstracts away the state of the system. It does this by transforming a stateful resource, the canvas, into an input of a stream of _events_. These events can be responded with functions that are semanically pure. Once these functions return their _value_, Bacon JS can inform and manipulate the canvas. This library allows for a very _Haskell_-esque style of programming, where one seperates "dirty" states from the purely functional. 
 
@@ -67,3 +67,9 @@ One of the disadvantages of JavaScript is its loose typing system. There are onl
 Not only can the allowance to draw a checker be linearly typed, but the checker datatypes can be as well. Linear types can ensure checkers in the game logic stage does not get lost and does not increase. This would be especially useful do to the extensible nature of MxN Checkers. Given some paremeters that define the particularies of a game instance, one can confirm that no pieces will go missing unless jumped.
 
 Once a proposed transition function is written and verified in ATS, a verifiable AI player can be written for the game. With dependent types we can ensure the AI player does not consiter illegal transitions of the board under any parameters of a game instance. A purely functional transition function would ensure evaluating it would not affect the of the state of the system. Also with the help of FRP, the AI play can be written and inserted easily as another stream.
+
+##Closing Remarks
+The projects implementation shows three principles of programing:
+* Use of different programming paradigms that lend themselves better to a different problems
+* Program verification through the use of strongly typed systems such as ATS
+* Application extensiblity through logical separation of tasks
