@@ -61,7 +61,9 @@ fun tokens_release(): void
 ```
 If all the tokens are not exhausted upon _release_ a JavaScript error will be thrown informing the programmer. Conversely, if all the tokens are exhausted while the board is still being drawn, another error is thrown. This enforces an important aspect of checkers where the number of pieces always goes down, but only when a "jump" occurs.
 
-##Further Verification: Dependent Types and Linear Resources
+##Further Verification and Additions: Dependent Types, Linear Resources, and AI
 One of the disadvantages of JavaScript is its loose typing system. There are only seven to ten avalible types depending how you count them. This leaves very little room for static verification and analysis. However, the functionally pure game logic section can be easily verified with static analysis. Dependent types can be configured to ensure a piece can never be moved outside the restrictions of the game. Since moves are simply _natXnat_ coordinates from previous _natXnat_ coordinates, dependent types can ensure moves are done in accordance to the rules of the game. For example, a checker will never move more than once without jumping or a checker will never move to the side. 
 
-Not only can the allowance to draw a checker be linearly typed, but the checker datatypes can be as well. Linear types can ensure checkers in the game logic stage does not get lost and does not increase.
+Not only can the allowance to draw a checker be linearly typed, but the checker datatypes can be as well. Linear types can ensure checkers in the game logic stage does not get lost and does not increase. This would be especially useful do to the extensible nature of MxN Checkers. Given some paremeters that define the particularies of a game instance, one can confirm that no pieces will go missing unless jumped.
+
+Once a proposed transition function is written and verified in ATS, a verifiable AI player can be written for the game. With dependent types we can ensure the AI player does not consiter illegal transitions of the board under any parameters of a game instance. A purely functional transition function would ensure evaluating it would not affect the of the state of the system. Also with the help of FRP, the AI play can be written and inserted easily as another stream.
