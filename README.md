@@ -26,7 +26,7 @@ A stateful representation of the logic was my first attempt at programming the g
 
 ```javascript
 function Board(){/*...*/} //the object or datatype
-function Event(row,col){this.row;this.col;} //simpler datatype
+function Event(row,col){this.row;this.col;} //simpler datatype just to contain info
 function transform_board(state,event){/*...*/} //returns state
 ```
 
@@ -34,4 +34,32 @@ Rather than consern itself with the state of the entire system, the _transform_b
 
 Bacon JS abstracts away the state of the system. It does this by transforming a stateful resource, the canvas, into an input of a stream of _events_. These events can be responded with functions that are semanically pure. Once these functions return their _value_, Bacon JS can inform and manipulate the canvas. This library allows for a very _Haskell_-esque style of programming, where one seperates "dirty" states from the purely functional. 
 
+###Resource Management: Linear Types to Enforce Correctness
+ATS wrapper methods help verify correctness of the draw methods manipulating the canvas. In whatever version of checkers one should play, the number of pieces should always stay the same until a "jump" move occurs. this means pieces can only be removed, never added. So to enforce this, a Linear-typed "tokens" where added to the game's drawing mechanism. The springboard function that Bacon JS calls to draw the board object is this:
 
+```ats
+fun ats_draw_board(Board): void = "mac#" // for use in JS
+```
+
+And then to call back into the JavaScript to draw individual pieces this function is called:
+```ats
+absvt@ype token
+// ...
+fun ats_draw_checker(token, Checker) : token 
+```
+From linearly typing _token_ the draw function cannot generate its own token's, it needs to extract them from a precalculated pool. The back end to this is a global variable initialiazed to the specified number of columns times the number of starting player rows (e.g. _8x3=24_ in regular checkers). To draw, a token needs to be extracted. There are four main functions interacting with the tokens to take care of the verification:
+
+```ats
+// Takes a token to draw a piece
+fun token_takeout(): Option_vt(token)
+// Removes token from the system when a piece is removed
+fun token_remove(token): void
+// Holds tokens to release
+fun token_hold(token): void
+// Releases all held tokens 
+fun tokens_release(): void
+```
+If all the tokens are not exhausted upon _release_ a JavaScript error will be thrown informing the programmer. Conversely, if all the tokens are exhausted while the board is still being drawn, another error is thrown. This enforces an important aspect of checkers where the number of pieces always goes down, but only when a "jump" occurs.
+
+###Further Verification: Dependent Types and Linear Resources
+One of the disadvantages of JavaScript is its loose typing system. There are only seven to ten avalible types depending how you count them. This leaves very little room for static verification and analysis. 
