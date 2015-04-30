@@ -1,7 +1,7 @@
 # MxN Checkers
 ######Final Project for cs520: Principles of Programming Languages
 
-The project aims to create a simple two-player checker game. The game uses functional reactive programming to implement the game and linear types via ATS to enforce the correctness of the game's rendering.
+The project aims to create a simple two-player checkers game. The game uses functional reactive programming to implement the game and linear types via ATS to enforce the correctness of the game's rendering.
 
 ###Project Structure
 
@@ -26,7 +26,12 @@ A stateful representation of the logic was my first attempt at programming the g
 
 ```javascript
 function Board(){/*...*/} //the object or datatype
-
-function transform_board(state,event){/*...*/}
+function Event(row,col){this.row;this.col;} //simpler datatype
+function transform_board(state,event){/*...*/} //returns state
 ```
+
+Rather than consern itself with the state of the entire system, the _transform_board_ function concerns itself only with the momementary configuration of the game during the given event. The given event is a click on a square with some coordinates at a row and column. After it figures out what the next configuration should be, Bacon JS takes care of the rest.
+
+Bacon JS abstracts away the state of the system. It does this by transforming a stateful resource, the canvas, into an input of a stream of _events_. These events can be responded with functions that are semanically pure. Once these functions return their _value_, Bacon JS can inform and manipulate the canvas. This library allows for a very _Haskell_-esque style of programming, where one seperates "dirty" states from the purely functional. 
+
 
