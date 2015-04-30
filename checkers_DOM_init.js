@@ -1,3 +1,10 @@
+/* 
+ * checker_DOM_init.js
+ * Author: Eric Dunton
+ * Initiates the state of the canvas when the program loads
+ */
+
+//helper function to parse url args
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -5,8 +12,10 @@ function getParameterByName(name) {
     return results === null ? false : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
+//initiate events
 window.addEvent("domready", function()
 {
+    //checks for change from default 8x8 board
     var chgrows = parseInt(getParameterByName('row'));
     var chgcols = parseInt(getParameterByName('col'));
     var chgplrs = parseInt(getParameterByName('plr'));
@@ -68,19 +77,5 @@ window.addEvent("domready", function()
     var boardobj = new Board();
     
     init_frp('tlabel','endturn');
-    
-    /*drawBoard(boardobj);
-    
-    setTimeout(function(){
-        boardobj = boardobj.toggle_select(0,1,true);
-        drawBoard(boardobj)},3000);
-    
-    
-    for(var i = 0; i < 3; ++i)
-        for(var j = 0; j < COLS; ++j) {
-            if((i%2 == 0 && j%2 == 1) || (i%2 == 1 && j%2 == 0)) 
-                drawPiece(i,j,"BLACK",true);
-            else drawPiece(ROWS-1-i,j,"RED",true);   
-        }*/
 
 });
