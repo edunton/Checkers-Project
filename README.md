@@ -3,7 +3,7 @@
 
 The project aims to create a simple two-player checkers game. The game uses functional reactive programming to implement the game and linear types via ATS to enforce the correctness of the game's rendering.
 
-###Project Structure
+##Project Structure
 
 The code behind the project demonstrates organization into three destinct catogories:
 
@@ -61,5 +61,7 @@ fun tokens_release(): void
 ```
 If all the tokens are not exhausted upon _release_ a JavaScript error will be thrown informing the programmer. Conversely, if all the tokens are exhausted while the board is still being drawn, another error is thrown. This enforces an important aspect of checkers where the number of pieces always goes down, but only when a "jump" occurs.
 
-###Further Verification: Dependent Types and Linear Resources
-One of the disadvantages of JavaScript is its loose typing system. There are only seven to ten avalible types depending how you count them. This leaves very little room for static verification and analysis. 
+##Further Verification: Dependent Types and Linear Resources
+One of the disadvantages of JavaScript is its loose typing system. There are only seven to ten avalible types depending how you count them. This leaves very little room for static verification and analysis. However, the functionally pure game logic section can be easily verified with static analysis. Dependent types can be configured to ensure a piece can never be moved outside the restrictions of the game. Since moves are simply _natXnat_ coordinates from previous _natXnat_ coordinates, dependent types can ensure moves are done in accordance to the rules of the game. For example, a checker will never move more than once without jumping or a checker will never move to the side. 
+
+Not only can the allowance to draw a checker be linearly typed, but the checker datatypes can be as well. Linear types can ensure checkers in the game logic stage does not get lost and does not increase.
