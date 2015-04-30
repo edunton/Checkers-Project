@@ -17,5 +17,8 @@ Each piece serves uses different programming paradigms that best fit the smaller
 * draw_checkers_vtypes.sats/draw_checkers_vtypes.dats (Resource Management)
 
 ###Canvas Utilities: A Paradigm of State
-The graphical display is a stateful resource. To properly display the game there needs to be a sense of where every polygon needs to go. To reflect this, the canvas utilites are set up in a very procdural manner. Each function corresponds to changing a bit of the display according to the given arguments. This matched up with the libraries that effect the canvas i.e. MooTools. When trying to morph the nature of a state, the procedural paradigm gives you the tools to fine tune the state. 
+The graphical display is a stateful resource. To properly display the game there needs to be a sense of where every polygon needs to go. To reflect this, the canvas utilites are set up in a very procdural manner. Each function corresponds to changing a bit of the display according to the given arguments. This matched up with the libraries that effect the canvas i.e. MooTools. When trying to morph the nature of a state, the procedural paradigm gives you the tools to fine tune the state. To implement this, DOM elements where stored for use in arrays. Since everything in JavaScript is a closure, leaving this state to be procedurally manipulated globally is an acceptable performance hit.
+
+###Game Logic: An Abstraction of Functional Purity
+The arguments to the canvas utilies however do not need to derive themselves from state directly. In programming the game rules and logic, FRP helps to abstract the state of the machine into a stream of events. This abstraction benefits the programmer by releaving the concerns of fine tuning objects and states. It becomes difficult to keep track of what variables were wrongly calculated at what time.
 
